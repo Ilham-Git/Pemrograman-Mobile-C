@@ -31,8 +31,8 @@ import kotlinx.coroutines.launch
  * ViewModel for SleepTrackerFragment.
  */
 class SleepTrackerViewModel(
-        dataSource: SleepDatabaseDao,
-        application: Application) : ViewModel() {
+    dataSource: SleepDatabaseDao,
+    application: Application) : ViewModel() {
 
     /**
      * Hold a reference to SleepDatabase via SleepDatabaseDao.
@@ -115,6 +115,21 @@ class SleepTrackerViewModel(
      */
     fun doneNavigating() {
         _navigateToSleepQuality.value = null
+    }
+
+    /**
+     * Navigation for the SleepDetail fragment.
+     */
+    private val _navigateToSleepDetail = MutableLiveData<Long>()
+    val navigateToSleepDetail
+        get() = _navigateToSleepDetail
+
+    fun onSleepNightClicked(id: Long) {
+        _navigateToSleepDetail.value = id
+    }
+
+    fun onSleepDetailNavigated() {
+        _navigateToSleepDetail.value = null
     }
 
     init {
@@ -203,9 +218,5 @@ class SleepTrackerViewModel(
             // Show a snackbar message, because it's friendly.
             _showSnackbarEvent.value = true
         }
-    }
-
-    fun onSleepNightClicked(id: Long) {
-        _navigateToSleepDetail.value = id
     }
 }

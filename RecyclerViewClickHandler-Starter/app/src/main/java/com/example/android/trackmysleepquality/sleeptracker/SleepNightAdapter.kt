@@ -27,7 +27,6 @@ import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBin
 class SleepNightAdapter(val clickListener: SleepNightListener) : ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
         holder.bind(getItem(position)!!, clickListener)
     }
 
@@ -39,8 +38,8 @@ class SleepNightAdapter(val clickListener: SleepNightListener) : ListAdapter<Sle
 
         fun bind(item: SleepNight, clickListener: SleepNightListener) {
             binding.sleep = item
-            binding.executePendingBindings()
             binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {
@@ -60,13 +59,11 @@ class SleepNightDiffCallback : DiffUtil.ItemCallback<SleepNight>() {
         return oldItem.nightId == newItem.nightId
     }
 
-
     override fun areContentsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
         return oldItem == newItem
     }
-
-
 }
+
 
 class SleepNightListener(val clickListener: (sleepId: Long) -> Unit) {
     fun onClick(night: SleepNight) = clickListener(night.nightId)
