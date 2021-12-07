@@ -204,4 +204,8 @@ class SleepTrackerViewModel(
             _showSnackbarEvent.value = true
         }
     }
+
+    fun onSleepNightClicked(id: Long) {
+        _navigateToSleepDetail.value = id
+    }
 }
