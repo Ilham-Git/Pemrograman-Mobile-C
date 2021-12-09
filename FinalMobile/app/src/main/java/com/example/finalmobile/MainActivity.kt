@@ -3,7 +3,10 @@ package com.example.finalmobile
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finalmobile.retrofit.ApiService
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG: String = "MainActivity"
 
+    lateinit var mainAdapter: MainAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,24 +24,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        setupRecyclerView()
         getDataFromApi()
+    }
+    private fun setupRecyclerView(){
+        mainAdapter = MainAdapter(arrayListOf())
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = mainAdapter
+        }
     }
 
     private fun getDataFromApi(){
-        ApiService.endPoint.getPhotos()
-            .enqueue(object : Callback<List<MainModel>> {
+        progressBar.visibility = View.VISIBLE
+        ApiService.endPoint.getData()
+            .enqueue(object : Callback<MainModel> {
                 override fun onResponse(
-                    call: Call<List<MainModel>>,
-                    response: Response<List<MainModel>>
+                    call: Call<MainModel>,
+                    response: Response<MainModel>
                 ) {
+                    progressBar.visibility = View.GONE
                     if (response.isSuccessful){
-                        val result = response.body()
-                        showPhotos(result!!)
+                        showData(response.body()!!)
                     }
                 }
 
-                override fun onFailure(call: Call<List<MainModel>>, t: Throwable) {
-                    printLog(t.toString())
+                override fun onFailure(call: Call<MainModel>, t: Throwable) {
+                    printLog("onFailure: $t")
+                    progressBar.visibility = View.GONE
                 }
 
             })
@@ -46,9 +61,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, message)
     }
 
-    private fun showPhotos(photos: List<MainModel>){
-        for (photo in photos){
-            printLog("url: ${photo.url}")
-        }
+    private fun showData(data: MainModel){
+        val results = data.result
+        mainAdapter.setData(results)
     }
 }
