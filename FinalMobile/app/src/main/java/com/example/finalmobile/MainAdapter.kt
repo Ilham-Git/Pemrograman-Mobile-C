@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.adapter_main.view.*
 
-class MainAdapter(val results: ArrayList<MainModel.Result>)
+class MainAdapter(val results: ArrayList<MainModel.Result>, val listener: OnAdapterListener)
         : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder (
         LayoutInflater.from(parent.context).inflate(R.layout.adapter_main, parent, false)
@@ -24,6 +24,9 @@ class MainAdapter(val results: ArrayList<MainModel.Result>)
             .error(R.drawable.img_placeholder)
             .centerCrop()
             .into(holder.view.imageView)
+        holder.view.setOnClickListener{
+            listener.onClick(result)
+        }
     }
 
     override fun getItemCount(): Int = results.size
@@ -36,5 +39,9 @@ class MainAdapter(val results: ArrayList<MainModel.Result>)
         results.clear()
         results.addAll(data)
         notifyDataSetChanged()
+    }
+
+    interface OnAdapterListener{
+        fun onClick(result: MainModel.Result)
     }
 }

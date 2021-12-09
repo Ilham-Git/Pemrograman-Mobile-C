@@ -1,9 +1,11 @@
 package com.example.finalmobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finalmobile.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,7 +30,15 @@ class MainActivity : AppCompatActivity() {
         getDataFromApi()
     }
     private fun setupRecyclerView(){
-        mainAdapter = MainAdapter(arrayListOf())
+        mainAdapter = MainAdapter(arrayListOf(), object: MainAdapter.OnAdapterListener{
+            override fun onClick(result: MainModel.Result) {
+                startActivity(Intent(applicationContext, DetailActivity::class.java)
+                    .putExtra("Intent_title", result.title)
+                    .putExtra("Intent_image", result.image)
+                )
+            }
+
+        })
         recyclerView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = mainAdapter
