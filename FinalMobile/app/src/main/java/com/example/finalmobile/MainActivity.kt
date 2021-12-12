@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finalmobile.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         })
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
+//            layoutManager = LinearLayoutManager(applicationContext)
+            layoutManager = GridLayoutManager(applicationContext, 3)
             adapter = mainAdapter
         }
     }
